@@ -69,7 +69,7 @@ func Upload(url, file string) (response string, err error) {
 
 	err = os.Remove(file)
 	if err != nil {
-
+		return "", err
 	}
 
 	return string(body), nil
