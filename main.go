@@ -14,6 +14,7 @@ import (
 	"errors"
 	"log"
 	"encoding/json"
+	"flag"
 )
 
 const DIRECTORY = "/tmp/"
@@ -65,6 +66,12 @@ func Upload(url, file string) (response string, err error) {
 	if res.StatusCode != http.StatusOK {
 		return "", errors.New("Error status: " + res.Status)
 	}
+
+	err = os.Remove(file)
+	if err != nil {
+
+	}
+
 	return string(body), nil
 
 }
@@ -142,9 +149,18 @@ func proxyHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("Server started")
+	var host string = "127.0.0.1"
+	var port string = "9090"
+
+	flag.StringVar(&host, "host", host, "bind host")
+	flag.StringVar(&port, "port", port, "bind port")
+	flag.Parse()
+
+	fmt.Println("Server started " + host + ":" + port)
+
 	http.HandleFunc("/upload", proxyHandler)
-	err := http.ListenAndServe(":9090", nil)
+	err := http.ListenAndServe(host+":"+port, nil)
+
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
