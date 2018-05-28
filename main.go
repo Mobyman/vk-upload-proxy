@@ -128,7 +128,7 @@ func proxyHandler(w http.ResponseWriter, r *http.Request) {
 	var body UploadBody
 	err = json.Unmarshal(bodyString, &body)
 	if err != nil {
-		log.Println(err)
+		log.Printf("%s: %s", err, bodyString)
 	}
 
 	file, err := Download(body.From)
